@@ -1,22 +1,31 @@
-#include <signal.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include "libft/libft.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   client.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ibalbako <ibalbako@student.42mulhouse.fr>  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/08/29 12:27:35 by ibalbako          #+#    #+#             */
+/*   Updated: 2022/08/29 12:28:12 by ibalbako         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	send_bit_by_bit(int pid, char *argv)
+#include "minitalk.h"
+
+void	s_bit_by_bit(int pid, char *str)
 {
-	size_t	j;
-	size_t	i;
-	int		move;
+	unsigned long	j;
+	unsigned long	i;
+	int				move;
 
-	j = ft_strlen(argv);
+	j = ft_strlen(str);
 	i = 0;
 	while (i < j)
 	{
 		move = 0;
 		while (move < 8)
 		{
-			if ((argv[i] >> move) & 1)
+			if ((str[i] >> move) & 1)
 				kill(pid, SIGUSR2);
 			else
 				kill(pid, SIGUSR1);
@@ -29,13 +38,12 @@ void	send_bit_by_bit(int pid, char *argv)
 
 int	main(int argc, char **argv)
 {
-
 	if (argc == 3)
 	{
-		send_bit_by_bit(ft_atoi(argv[1]), argv[2]);
-		send_bit_by_bit(ft_atoi(argv[1]), argv[write(1 , "\n", 2)]);
+		s_bit_by_bit(ft_atoi(argv[1]), argv[2]);
+		s_bit_by_bit(ft_atoi(argv[1]), "\n");
 	}
 	else
-		write(1, "./client 'pid' 'message'\n", 25);
+		write(1, "Need : ./client 'pid' 'message'\n", 32);
 	return (0);
 }
